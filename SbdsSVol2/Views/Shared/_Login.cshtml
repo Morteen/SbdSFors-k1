@@ -1,0 +1,191 @@
+﻿@model SbdsSVol2.Models.UserAccount
+@*@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}*@
+@if (Session["UserId"] != null)
+    {
+
+        <ul class="nav navbar-nav navbar-right">
+    <li>
+
+        @*<div style="color:white;font-size:15px;font-weight:bold"></div>*@
+        <a hr="#">Hei @Session["UserName"] </a>
+
+    </li>
+        <li>
+            <a hr="#" onclick="LogOut()">Logg ut </a>
+        </li>
+
+    </ul>
+   
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            
+            <a hr="#"  onclick="Reg()">Registrer </a>
+            
+        </li>
+        <li>
+            <a hr="#"  onclick="Login()">Login </a> 
+        </li>
+        
+    </ul>
+
+}
+
+<div id="LoginModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                @*Legg login her*@
+@using (Html.BeginForm())
+            {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>UserAccount</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Login" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}@*Slutt på Beginn form*@
+
+                @*Slutt på login*@
+            </div><!--Body-->
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" data-dismiss="modal">Avbryt</a>
+                <a href="#" class="btn btn-success" onclick="DeleteApplication()"> Slett</a>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<div id="RegModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                @*Legg Register her*@
+               
+
+                @*Slutt på Registrer*@
+            </div><!--Body-->
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" data-dismiss="modal">Avbryt</a>
+                <a href="#" class="btn btn-success" onclick="DeleteApplication()"> Slett</a>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {})
+
+    function Login() {
+       
+        $("#LoginModal").modal("show");
+    }
+
+    function Reg() {
+
+        $("#RegModal").modal("show");
+    }
+
+        function DeleteApplication() {
+            $("#loaderDiv").show();
+            var CorId = $("#hiddenApplicationId").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Account/AtCourseDelete",
+                data: { AtCourseId: CorId },
+                success: function (result) {
+                    $("#loaderDiv").hide();
+                    $("#row_" + CorId).remove();
+                    $("#deleteModal").modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    alert("En feil oppsto ved sletting - " + error);
+                    $("#loaderDiv").hide();
+                    $("#deleteModal").modal('hide');
+                }
+            })
+        }
+
+
+
+</script>
+
+
+
+

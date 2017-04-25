@@ -1,0 +1,167 @@
+﻿
+@{
+    ViewBag.Title = "LoggedIn";
+}
+
+<h2>LoggedIn</h2>
+@if (Session["UserId"] != null)
+{
+    <h4>Hei @Session["UserName"]</h4>
+
+    @*<a href="#" onclick="Course()"class="btn btn-default">Vis kurs liste </a>*@
+    @*<a herf="#" onclick="MyCourse()"class="btn btn-default" id="showCourse">Mine kurs </a>*@
+
+    <div id="Courslist" class="jumbotron">
+        <p>Dette er alle kurs ved SbdS, vil du melde deg på ?</p>
+        <table class="table table-striped">
+            @foreach (var item in ViewBag.CourseList)
+            {
+                <tr id="row_@item.CourseId">
+
+                    <td>
+                        @item.Name
+                    </td>
+
+
+                    <td>
+                        @Html.ActionLink("Meld på Kurs", "AddToCourse", new { id = item.CourseId })
+
+
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    </div>
+
+
+
+
+<div id="MineCourse" class="jumbotron">
+    <table class="table table-striped">
+        @foreach (var item in ViewBag.MineCourseList)
+        {
+            <tr id="row_@item.AtCourseId">
+
+                <td>
+                    @item.Course.Name
+                </td>
+
+
+                <td>
+                    <a hr="#" class="btn btn-warning " onclick="ConfirmDelete(@item.AtCourseId)">Slett </a>
+                   
+
+
+
+                </td>
+            </tr>
+        }
+
+    </table>
+   
+</div>@*slutt mine kurs div*@
+    <input type="hidden" id="hiddenApplicationId" />
+    <!--Deletemodal-->
+    <div id="deleteModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h4>Er du sikker på at du vil slutte på dette kurset?</h4>
+
+                    <div style="text-align:center;display:none " id="loaderDiv">
+                        <i class="fa fa-spinner" aria-hidden="true"></i>
+                    </div>
+                </div><!--Body-->
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default" data-dismiss="modal">Avbryt</a>
+                    <a href="#" class="btn btn-success" onclick="DeleteApplication()"> Slett</a>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <!--Slutt på deletemodal-->
+
+
+    
+
+
+
+
+}@*slutt på If Session*@
+
+
+
+<script>
+    $(document).ready(function () {
+
+
+        $("#MineCourse").hide();
+        $("#Courslist").hide();
+        
+    })
+
+
+    function MyCourse() {
+
+        $("#Courslist").hide();
+        $("#MineCourse").show();
+    }
+
+
+
+    function Course() {
+
+        $("#Courslist").show();
+        $("#MineCourse").hide();
+    }
+
+
+
+
+
+
+
+
+    function ConfirmDelete(AtCourseId) {
+        $("#hiddenApplicationId").val(AtCourseId);
+            $("#deleteModal").modal("show");
+        }
+
+        function DeleteApplication() {
+            $("#loaderDiv").show();
+            var CorId = $("#hiddenApplicationId").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Account/AtCourseDelete",
+                data: { AtCourseId: CorId },
+                success: function (result) {
+                    $("#loaderDiv").hide();
+                    $("#row_" + CorId).remove();
+                    $("#deleteModal").modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    alert("En feil oppsto ved sletting - " + error);
+                    $("#loaderDiv").hide();
+                    $("#deleteModal").modal('hide');
+                }
+            })
+        }
+
+        
+
+</script>
+
+
+
+
+

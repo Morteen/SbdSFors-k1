@@ -1,0 +1,66 @@
+﻿
+
+
+
+<div id="CourselistDiv">
+    <table class="table table-striped">
+        <tr>
+            <th>
+                Kursnavn
+            </th>
+            <th>
+                Dag
+            </th>
+            <th>
+               Instruktør
+            </th>
+            
+        </tr>
+
+        @foreach (var item in ViewBag.Courselist)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Day
+                </td>
+                <td>
+                    @item.Instructor
+                </td>
+               
+            </tr>
+
+        }
+    </table>
+</div>@*Slutt på CourselistDiv *@
+
+<a href="#" onclick="Course()">Lukk liste </a>
+
+
+
+
+
+<script>
+    $(document).ready(function () { })
+
+    
+
+    
+    function Course() {
+
+        $("#CourselistDiv").hide();
+    }
+
+
+
+
+
+</script>
+
+
+
+
+
+

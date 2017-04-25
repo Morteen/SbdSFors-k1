@@ -1,0 +1,39 @@
+﻿
+
+<div id="userlistDiv">
+    <table>
+        <tr>
+            <th>
+       Fornavn
+            </th>
+            <th>
+                Etternavn
+            </th>
+            <th>
+               Adresse
+            </th>
+            <th>
+               Alder
+            </th>
+        </tr>
+
+        @foreach (var item in ViewBag.userlist)
+        {
+            <tr>
+                <td>
+                    @item.Fname
+                </td>
+                <td>
+                    @item.Lname
+                </td>
+                <td>
+                    @item.Adr
+                </td>
+                <td>
+                    @item.Age
+                </td>
+            </tr>
+
+        }
+    </table>
+</div>@*Slutt på userlistDiv *@
