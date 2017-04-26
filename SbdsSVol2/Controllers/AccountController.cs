@@ -16,8 +16,12 @@ namespace SbdsSVol2.Controllers
         public ActionResult Index()
         {
             List<UserAccount> list = db.UserList.ToList();
+            List<Course> courses = db.CoursList.ToList();
             ViewBag.userList = list;
-            
+            ViewBag.Courselist = courses;
+            ViewBag.UserAtCourse = db.AtCourseList.ToList();
+
+
             return View();
         }
 
