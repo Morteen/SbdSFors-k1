@@ -1,7 +1,10 @@
-﻿
+﻿<script src="~/Scripts/MyScript.js"></script>
 
 <div id="userlistDiv" class="jumbotron">
     <table  class="table table-striped">
+        <theading  colspan="4"style="text-align:center">
+            Elever ved SbdS
+        </theading>
         <tr>
             <th>
        Fornavn
@@ -32,6 +35,10 @@
                 <td>
                     @item.Age
                 </td>
+                <td>
+                    <a href="#" id="EditUser"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a href="#" id="DeleteUser"><i style="color:red" class="glyphicon glyphicon-trash"></i></a>
+                </td>
             </tr>
 
         }
@@ -39,6 +46,9 @@
 </div>@*Slutt på userlistDiv *@
 <div id="CourselistDiv" class="jumbotron">
     <table class="table table-striped">
+        <theading style="text-align:center">
+            Kurs ved SbdS
+        </theading>
         <tr>
             <th>
                 Kursnavn
@@ -67,7 +77,8 @@
                     @item.Instructor
                 </td>
                 <td>
-                    <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a href="#"id="EditCourse"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a href="#" id="DeleteCourse"><i style="color:red" class="glyphicon glyphicon-trash"></i></a>
                 </td>
             </tr>
 
@@ -76,6 +87,11 @@
 </div>@*Slutt på CourselistDiv *@
 <div id="UsersAtCourseDiv" class="jumbotron">
     <table class="table table-striped">
+        
+            <theading style="text-align:center">
+                Elever registrert på kurs
+            </theading>
+       
         <tr>
             <th>
                 Elevnummer
@@ -99,7 +115,7 @@
 
         @foreach (var item in ViewBag.UserAtCourse)
         {
-            <tr>
+            <tr id="row_@item.AtCourseId">
                 <td>
                     @item.UserAccount.UserId
                 </td>
@@ -116,10 +132,40 @@
                    
                 </td>
                 <td>
-                    <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a href="#"id="editUserAtCourse"><i class="glyphicon glyphicon-pencil"></i> </a>
+                    <a href="#" id="DeleteUserAtCourse"onclick="ConfirmDelete(@item.AtCourseId)"><i style="color:red" class="glyphicon glyphicon-trash"></i> </a>
                     
             </tr>
 
         }
     </table>
 </div>@*Slutt på UsersAtCourseDiv *@
+
+
+<input type="hidden" id="hiddenApplicationId" />
+<!--Deletemodal-->
+<div id="deleteModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h4>Er du sikker på at du vil slette eleven på dette kurset?</h4>
+
+                <div style="text-align:center;display:none " id="loaderDiv">
+                    <i class="fa fa-spinner" aria-hidden="true"></i>
+                </div>
+            </div><!--Body-->
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" data-dismiss="modal">Avbryt</a>
+                <a href="#" class="btn btn-success" onclick="DeleteApplication()"> Slett</a>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!--Slutt på deletemodal-->
